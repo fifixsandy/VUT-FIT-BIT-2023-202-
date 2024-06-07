@@ -5,87 +5,43 @@ All of them should be used ONLY for inspiration, please, don't plagiarise (only 
 
 More projects will be added after the end of each semester.
 
-## Structure
-Structure of the repository is shown below. All subdirectories have their own README.md file for more description (including points and known mistakes).
+## Contents
+All subdirectories have their own README.md file for more description (including points and known mistakes).
+- **1BIT**
+  - **1.Semester**
+    - **IEL**
+      - PDF of semestral project
+    - **IUS**
+      - PDF of the second, team project (ER, Use Case, State, Class, Sequence, Communication diagrams) - Mamooth Hunters
+    - **IZP**
+      - First project (keyfilter.c)
+      - Second project (maze.c)
+  - **2.Semester**
+      - **INC**
+        - VHDL of the whole circuit (uart_rx.vhd)
+        - VHDL of FSM (uart_rx_fsm.vhd)
+        - PDF report
+      - **IOS**
+        - First project, bash script filtering logs (xtf)
+        - Second project, synchronization using semaphores (proj2.c)
+      - **IZG**
+        - implementation of a GPU (gpu.cpp)
+        - preparing model, command buffer, vertex and fragment shader (prepareModel.cpp)
+      - **IZLO**
+        - First project, SAT solving conditions (add_conditions.c)
+        - Second project, SMT solving formula (projekt2.smt)
+- **Elective**
+  - **ITY**
+    - **proj1 - proj5**
+      - TeX files, images, makefiles, bibtex,...
+  - **IVS**
+    - black_box_tests.cpp
+    - white_box_tests.cpp
+    - tdd_code.cpp
+    - tdd_code.h
+   
+    - Link to team project - calculator in README
 
-```
-├── 1BIT
-│   ├── 1.Semester
-│   │   ├── IEL
-│   │   │   ├── README.md
-│   │   │   └── xnovakf00.pdf
-│   │   ├── IUS
-│   │   │   ├── Project-2.pdf
-│   │   │   └── README.md
-│   │   └── IZP
-│   │       ├── README.md
-│   │       ├── keyfilter.c
-│   │       └── maze.c
-│   └── 2.Semester
-│       ├── INC
-│       │   ├── README.md
-│       │   ├── uart_rx.vhd
-│       │   ├── uart_rx_fsm.vhd
-│       │   └── zprava.pdf
-│       ├── IOS
-│       │   ├── README.md
-│       │   ├── proj2.c
-│       │   └── xtf
-│       ├── IZG
-│       │   ├── README.md
-│       │   ├── gpu.cpp
-│       │   └── prepareModel.cpp
-│       └── IZLO
-│           ├── README.md
-│           ├── add_conditions.c
-│           └── projekt2.smt2
-├── Elective
-│   ├── ITY
-│   │   ├── README.md
-│   │   ├── proj1
-│   │   │   ├── Makefile
-│   │   │   └── proj1.tex
-│   │   ├── proj2
-│   │   │   ├── Makefile
-│   │   │   └── proj2.tex
-│   │   ├── proj3
-│   │   │   ├── Makefile
-│   │   │   ├── algorithm2e.sty
-│   │   │   ├── etiopan.eps
-│   │   │   ├── oniisan.eps
-│   │   │   ├── oniisan2.eps
-│   │   │   └── proj3.tex
-│   │   ├── proj4
-│   │   │   ├── Makefile
-│   │   │   ├── odkazy.bib
-│   │   │   ├── proj4.pdf
-│   │   │   └── proj4.tex
-│   │   └── proj5
-│   │       ├── Makefile
-│   │       ├── beamercolorthemeFIT.sty
-│   │       ├── beamerfontthemeFIT.sty
-│   │       ├── beamerinnerthemeFIT.sty
-│   │       ├── beamerouterthemeFIT.sty
-│   │       ├── beamerthemeFIT.sty
-│   │       ├── img
-│   │       │   ├── delete.pdf
-│   │       │   ├── fitlogo1.pdf
-│   │       │   ├── fitlogo1_cz.pdf
-│   │       │   ├── fitlogo3.pdf
-│   │       │   ├── insert.pdf
-│   │       │   ├── listschema.pdf
-│   │       │   └── motivacia.pdf
-│   │       ├── proj5.pdf
-│   │       └── proj5.tex
-│   └── IVS
-│       ├── README.md
-│       ├── black_box_tests.cpp
-│       ├── tdd_code.cpp
-│       ├── tdd_code.h
-│       └── white_box_tests.cpp
-├── LICENSE
-└── README.md
-```
 
 
 ## License
