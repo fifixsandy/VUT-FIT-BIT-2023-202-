@@ -1,0 +1,96 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MENO:             ITY Projekt 4 - Bibliografické citace
+% AUTOR:            Filip Novak
+% XLOGIN:           xnovakf00
+% DATUM:            15-04-2024
+% POSLEDNA UPRAVA:  17-04-2024
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper, 11pt]{article}
+\usepackage[left=2cm, top=3cm, text={17cm,24cm}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage[english,czech,slovak]{babel}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=iso-numeric]{biblatex}
+\usepackage{hyperref}
+
+\addbibresource{odkazy.bib}
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \textsc{\Huge{Vysoké učení technické v~Brně\\[0.4em]} % názov školy a fakulty ponechávam český
+        \huge{Fakulta informačních technologií}}\\        
+        \vspace{\stretch{0.382}}
+        \LARGE{Typografia a~publikovanie\,--\,4. projekt}\\
+        \Huge{Bibliografické citácie}\\
+        \vspace{\stretch{0.618}}
+    \end{center}
+    \Large{\today\hfill Filip Novák}
+\end{titlepage}
+
+\begin{center}
+    \Huge{\textbf{Fonty a~typografia}}
+\end{center}
+
+\section*{Úvod}
+Fonty, alebo znakové sady sú súhrnom všetkých znakov jedného typu a~rezu \cite{Rybicka_latex}. Sú jednou z~najzákladnejších častí typografie. Vhodný výber a~správne zásady použitia, či kombinovania
+fontov pridávajú dielu hodnotu nielen po estetickej stránke, ale aj dokazujú profesionálnosť autora a~dôveryhodnosť práce.
+Preto by malo byť v~záujme všetkých autorov mať tieto znalosti a~orientovať sa v~danej problematike.
+
+\section{Výber softvéru pre sadzbu}
+Pri výbere softvéru je potrebné stanoviť si požiadavky, ako sú napríklad jednoduchosť použitia, rozmanitosť funkcií,
+prenositeľnosť, či možnosti prispôsobenia. Pre jednoduché texty sa využívajú tzv. \emph{WYSIWYG} textové procesory (What You See Is What You Get),
+ktoré zobrazujú výsledný dokument v~reálnom čase \cite{Lukes_diploma}. Ak je jednoduchosť použitia druhoradá a~dôležité je vydolovať zo softvéru čo najviac,
+využívajú sa rôzne sádzacie systémy, primárne \LaTeX \cite{Lukes_diploma, Found_latex}. Ten bol pôvodne vytvorený pre sadzbu
+matematických či fyzikálnych odborných textov, ponúka však veľa možností ako upravovať a~prispôsovať fonty a~písmo ako celok (viz \cite{Helmut_latex}, kapitola 4).
+
+\section{Vlastnosti fontu}
+Medzi základné vlastnosti fontu patria hrúbka ťahu (pomer hrúbky ťahu voči veľkosti písma), sklon písma (uhol naklonenia) a~spôsob
+zakončenia ťahu (patkové alebo bezpatkové písmo) \cite{Sladovnikova_bakalar}.
+Špeciálna úprava fontu môže byť použitá pre zvýrazňovanie častí textu s~účelom upozornenia čitateľa. Tradične sa
+využíva \emph{kurzíva}, \textsc{kapitálky}, VERZÁLKY alebo \textbf{polohrubé písmo} \cite{Rybicka_latex}.
+
+\section{Zlaté pravidlá písma}
+\emph{Konzistencia} je v~typografii jedno z~pravidiel, ktoré by sa malo dodržiavať za každých podmienok \cite{Twelve_golden_rules}. Použitie veľa rôznych spôsobov pre zvýrazňovanie
+podstatných častí textu pôsobí rušivo nielen po estetickej stránke, ale môže aj zmiasť čitateľa. Náhla zmena fontu v~strede textu bez opodstatnenia
+nedáva zmysel a~je len na škodu.
+\emph{Efekty} môžu prácu ozvláštniť a~pridať estetickú hodnotu, no nie je vítané používať ich za každú cenu. Prebytok
+tieňov, rozmazaní a~farieb vedie k~tomu, že dielo bude považované za amatérske. 
+V~neposlednom rade je \emph{čitateľnosť}. Platí, že hlavným účelom akejkoľvek literárnej práce je jasné a~zrozumiteľné podanie informácií čitateľovi. Experimentálne fonty, kde nie je jasné, aký znak
+je aké písmeno zabraňuje rýchlemu pochopeniu textu.
+
+Pravidlo čitateľnosti má však výnimku vo veľmi špeciálnom prípade \cite{Oppenheimer_hard_fonts}, kedy autor chce prinútiť
+konzumenta zamyslieť sa nad textom a~rozlúštiť ho. Prieskum ukázal, že žiaci, ktorí sa učili z~textu používajúceho menej čitateľný font si zapamätali
+viac, ako žiaci, ktorí text dostali v~čitateľnejšej podobe.
+
+\section{Prekvapivé dopady výberu písma}
+Písmo a~konkrétne fonty v~nás môžu vyvolávať rôzne emócie \cite{Sladovnikova_bakalar}. Fonty využívajúce zaoblenia na nás pôsobia ukľudňujúco v~porovnaní s~fontami, ktoré sú ostrejšie a~špicatejšie. Ostré hrany si spájame s~nebezpečnými situáciami a~preto sú vhodné pre varovania, či upozornenia.
+Zdobené písma v~nás často evokujú pocit kreativity, detskej radosti a~nevinnosti. Niektoré fonty sú špeciálne navrhnuté pre ľudí s~dyslexiou \cite{Dyslexie}. Každé písmeno je upravené, aby sa ľuďom s~touto poruchou najlepšie čítalo.  
+
+Pri výbere písma pre náš účel by sme teda mali myslieť na tieto fakty, aby sme dosiahli očakávaný výsledok.
+
+\section{Problém kontroly}
+Pre aspekty diel, kde je presnosť dôležitá, existuje množstvo automatických alebo poloautomatických nástrojov na kontrolu korektnosti. Pre matematické vzorce v~\LaTeX u je to napríklad
+\emph{EqFix} \cite{DSET}, ktorý kontroluje a~opravuje chybné matematické rovnice na základe dodaných príkladov.
+
+Takýto nástroj pre overovanie, ktorý by s~veľkou presnosťou určil, či výber fontov a~efektov je absolútne korektný, by sa vyvíjal veľmi ťažko. Správnosť dokáže určiť len človek, ktorý pozná zámer diela a~je oboznámený s~pravidlami a~zásadami.
+
+\section{Fonty dnes}
+Aj keď typografia ako taká už existuje dlhú dobu, nové fonty sú stále navrhované a~pridávané do obehu. Vo svete sa každoročne organizujú workshopy a~konferencie o~písme a~typografii, ktoré nadšencom
+ponúkajú možnosť stretnúť sa s~odborníkmi a~naučiť sa novým znalostiam. Jedna z~konferencií v~Českej republike nesie názov \emph{Brno Bold Typo} \cite{Brno_bold_typo} a~organizuje ju štúdio Bloomfield.
+Usporiadavajú sa aj súťaže, kde sa podľa rôznych kritérií vyberajú tie najlepšie fonty. V~roku 2023 spoločnosť Fiverr po dlhej analýze za výherný font vyhlásilo Montserrat 2024 \cite{Fiverr}.
+
+\section*{Záver}
+Keďže fonty do veľkej miery zasahujú do celkového dojmu z~diela, každý autor by mal byť schopný korektne používať prostriedky,
+ktoré sú mu ponúknuté. Táto oblasť typografie sa stále rozvíja a~je prospešné byť v~obraze s~aktuálnymi trendami.
+\newpage
+\printbibliography
+\end{document}
+
+% V proj4.log sa zobrazovala chyba overfull, pretože názov zborníka bol príliš dlhý - slovo Software som nahradil skratkou SW.
+% Varovanie '\mainlang' is deprecated in favour of '\textmainlang' je pravdepodobne z bibtex štýlu, použil som ten z prezentácie.
+% Varovanie destination with the same identifier je (podľa toho, čo som našiel na internete) spôsobené balíkom hyperref, ktorý je (mám pocit) 
+% konfliktný s takmer všetkým. Keďže v predchádzajúcich projektoch sa varovanie spôsobené hyperref nijak nebralo do úvahy, ponechám balík.

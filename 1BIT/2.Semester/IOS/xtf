@@ -1,0 +1,337 @@
+#!/bin/bash
+############################################################################################
+
+# NAME:         IOS PROJECT 1 - XTF
+# DATE:         10-03-2024
+# LAST CHANGE:  17-03-2024 18:36
+# AUTHOR:       Filip Novák
+# XLOGIN:       xnovakf00
+# DESCRIPTION:  Script used for processing logs with records of trades with cryptocurrencies
+#               and printing out the desired records or information.
+# THIS PROJECT HAS BEEN STORED ON GITHUB FOR PERSONAL USE, IF THIS COMMENT IS HERE, THE PERSON THAT HAS SUBMITTED IT HAS STOLEN IT AND DIDNT EVEN OPEN IT
+
+############################################################################################
+####################              BEGINNING OF THE SCRIPT              #####################
+
+
+# FUNCTIONS AND VARIABLES
+############################################################################################
+
+export POSIXLY_CORRECT=yes  
+export LC_ALL=C                 
+
+after="" # considering records after this date if specidied
+before="" # considering records before this date if specified 
+currency="" # considering only these currencies if specified
+user="" # considering this user (has to be specified)
+command="" # performing this task on the logs
+
+# shellcheck disable=SC2034
+# statusArr is used in awk, but shellcheck doesn't seem to detect that, it really got on my nerves so I disabled this warning 
+declare -A statusArr  # empty array - keys = currencies, values = profit/status
+
+shiftBy=0 # value for shifting the cmd arguments
+
+if ! [ -v XTF_PROFIT ];then # check whether XTF_PROFIT is set
+    XTF_PROFIT=20 # if not, set to 20%
+fi
+
+helpPrint()
+{
+    printf "DESCRIPTION: 
+    Script used for processing logs with records of trades with cryptocurrencies
+    and printing out the desired logs or information.\n
+USAGE: xtf [-h|--help] [FILTER] [COMMAND] USER LOG [LOG2 [...]\n
+COMMANDS:
+        list                prints records of a user
+        list-currency       prints sorted list of currencies
+        status              prints actual status of an account sorted and based on currencies
+        profit              prints status of an account with added fictional profit\n
+FILTERS:
+        -a DATETIME         records after this date are considered
+        -b DATETIME         records before this date are considered
+        -c CURRENCY         records with this currency are considered
+        -h | --help         prints this message and ends the script
+        
+        DATETIME FORMAT: YYYY-MM-DD HH:MM:SS\n"
+}
+
+
+rxCurrency='[a-zA-Z]{3}' # three letters
+rxDateTime='[0-9]{4}-[0-9]{2}-[0-9]{2}\ [0-9]{2}:[0-9]{2}:[0-9]{2}' #YYYY-MM-DD HH:MM:SS
+rxValue='-?[0-9]+\.[0-9]{4}' # (-)any numbers . 4 numbers
+rxUser='[^;]+' # any sequence of characters except ;
+rxLine="$rxUser;$rxDateTime;$rxCurrency;$rxValue" # all together
+
+
+dateValidityCheck()
+{
+    if ! echo "$1" | grep -Eq "^$rxDateTime$" ; then # checks format YYYY-MM-DD HH:MM:SS
+        return 1
+    fi
+
+    if date -d "$1" >/dev/null 2>&1; then # checks if the date is valid (e.g. not 33rd day of month)
+        return 0
+    else 
+        return 1
+    fi
+}
+# THIS PROJECT HAS BEEN STORED ON GITHUB FOR PERSONAL USE, IF THIS COMMENT IS HERE, THE PERSON THAT HAS SUBMITTED IT HAS STOLEN IT AND DIDNT EVEN OPEN IT
+
+currencyValidityCheck()
+{
+    if echo "$1" | grep -Eq "^$rxCurrency$"; then
+        return 0
+    fi
+    return 1
+}
+
+commandUserCheck()
+{
+    if [ "$1" != "list" ] &&    # if the command argument is omitted, sets it to list and user=first argument (after shift)
+      [ "$1" != "list-currency" ] &&
+      [ "$1" != "status" ] &&
+      [ "$1" != "profit" ]; then
+
+        user=$1
+        command="list"
+        shiftBy=1 # shifts the username and arguments will only be logs
+    else        
+        command=$1
+        user=$2
+        shiftBy=2  # shifts the username and the command and arguments will only be logs
+    fi
+    if  [ "$user" = "list" ] ||    # user can't be command
+      [ "$user" = "list-currency" ] ||
+      [ "$user" = "status" ] ||
+      [ "$user" = "profit" ]; then
+        echo "MISSING USER" >&2
+        return 1
+    fi
+    return 0
+}
+
+logExistCheck()
+{
+    for file in "$@"; do
+        if ! [ -f "$file" ] || ! [ -r "$file" ]; then
+            echo "INVALID FILE $file. Check it's existance or read permissions." >&2
+            return 1
+        fi
+    done
+    return 0
+}
+
+# takes all logs and puts them to stdout (use pipeline to another function)
+logProcess()   
+{
+    for file in "$@"; do
+        if [[ "$file" =~ \.gz$ ]]; then
+            zcat "$file" # file is compressed, zcat to look into the file without extracting
+        else
+            cat "$file"
+        fi
+    done
+    return 0
+}
+
+linesCheck()
+{
+    while IFS= read -r line; do # read line by line
+        if ! echo "$line" | grep -Eq "$rxLine" ; then # if doesn't match regex
+            if [ "$line" != "" ];then # and is not empty 
+                return 1; 
+            fi
+        fi
+    done 
+    return 0
+}
+# THIS PROJECT HAS BEEN STORED ON GITHUB FOR PERSONAL USE, IF THIS COMMENT IS HERE, THE PERSON THAT HAS SUBMITTED IT HAS STOLEN IT AND DIDNT EVEN OPEN IT
+
+############################################################################################
+
+# MAIN BODY OF SCRIPT
+############################################################################################
+
+# prints help and exits with 0
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    helpPrint
+    exit 0
+fi
+
+while getopts "a:b:c:" opts
+do
+    case "$opts" in
+        a)  
+            dateValidityCheck "$OPTARG"
+            returning=$?
+
+            if [ 0 -ne $returning ]; then
+                echo "INVALID DATE FORMAT" >&2
+                exit 1
+            fi 
+            if [ "$after" != "" ]; then
+                echo "AFTER SET MORE THAN ONCE" >&2
+                exit 1
+            else
+                after=$OPTARG
+            fi;;           
+
+        b)  
+            dateValidityCheck "$OPTARG"
+            returning=$?
+
+            if [ 0 -ne $returning ]; then
+                echo "INVALID DATE FORMAT" >&2
+                exit 1
+            fi
+            if [ "$before" != "" ]; then
+                echo "BEFORE SET MORE THAN ONCE" >&2
+                exit 1
+            else
+                before=$OPTARG
+            fi;;
+        c)  
+            currencyValidityCheck "$OPTARG"
+            returning=$?
+
+            if [ 0 -ne $returning ]; then
+                echo "INVALID CURRENCY FORMAT" >&2
+                exit 1
+            fi
+
+            currency+=$OPTARG
+            currency+=" ";;
+        :)
+            echo "REQUIRES AN ARGUMENT -$OPTARG" >&2
+            exit 1;;
+        *)  
+            echo "UNKNOWN OPTION, USE OPTIONS -a -b -c WITH A PARAMETER." >&2
+            exit 1;;
+    esac
+done
+
+# shifting arguments, so there will be only user/command/logs
+OPTIND=$((OPTIND - 1))
+shift $OPTIND
+
+# after opts there have to be AT LEAST two arguments -> (command), user, log(s)
+if [ $# -lt 2 ]; then
+    echo "INSUFFICIENT NUMBER OF ARGUMENTS" >&2
+    exit 1
+fi
+
+commandUserCheck "$@"
+returning=$?
+if [ 0 -ne "$returning" ];then
+    exit 1
+fi
+
+shift $shiftBy
+
+# arguments are only logs, if there are none, error
+if [ $# -lt 1 ]; then
+    echo "INSUFFICIENT NUMBER OF ARGUMENTS" >&2
+    exit 1
+fi
+
+if ! logExistCheck "$@"; then
+    exit 1;
+fi
+
+logProcess "$@" | linesCheck
+
+if [ $? -eq 1 ]; then
+    echo "ERROR IN LOG FILE" >&2
+    exit 1
+fi
+    
+case "$command" in
+    list)
+        logProcess "$@" | awk -F ";" -v user="$user" -v after="$after" -v before="$before" -v currency="$currency"\
+        '($1 ~ user) && \
+        (($2 > after) || (after == "")) && \
+        (($2 < before) || (before == "")) && \
+        ((index(currency, $3)) || (currency == "")) \
+        {print}'
+        exit 0;;
+
+    list-currency)
+        logProcess "$@" | awk -F ";" -v user="$user" -v after="$after" -v before="$before" -v currency="$currency"\
+        '($1 ~ user) && \
+        (($2 > after) || (after == "")) && \
+        (($2 < before) || (before == "")) && \
+        ((index(currency, $3)) || (currency == "")) \
+        {print $3}'| uniq | sort
+        exit 0;;
+    status)
+        logProcess "$@" | awk -F ";" -v user="$user" -v after="$after" -v before="$before" -v currency="$currency"\
+        '{
+            if( ($1 ~ user) && (($2 > after) || (after == "")) && (($2 < before) || (before == "")) && ( (index(currency, $3)) || (currency == "")))
+            { 
+                if (!statusArr[$3])
+                {
+                    statusArr[$3]=$4
+                }
+                else
+                {
+                    statusArr[$3]=statusArr[$3]+$4
+                }
+            }
+        }
+            END {
+                for (key in statusArr)
+                {
+                    printf "%s : %.4f\n", key, statusArr[key]
+                }
+            }'\
+        | sort
+        exit 0
+        ;;
+    profit)
+        logProcess "$@" | awk -F ";" -v user="$user" -v after="$after" -v before="$before" -v currency="$currency" -v xtfprofit="$XTF_PROFIT"\
+        '{
+            if( ($1 ~ user) && (($2 > after) || (after == "")) && (($2 < before) || (before == "")) && ( (index(currency, $3)) || (currency == "")))
+            { 
+                if ( $4 > 0 )
+                {
+                    if (!statusArr[$3])
+                    {
+                        statusArr[$3]=$4*(1+(xtfprofit/100))
+                    }
+                    else
+                    {
+                        statusArr[$3]=statusArr[$3]+$4*(1+(xtfprofit/100))
+                    }
+                }
+                else
+                {
+                    if (!statusArr[$3])
+                    {
+                        statusArr[$3]=$4
+                    }
+                    else
+                    {
+                        statusArr[$3]=statusArr[$3]+$4
+                    }                    
+                }
+            }
+        }
+            END {
+                for (key in statusArr)
+                {
+                    printf "%s : %.4f\n", key, statusArr[key]
+                }
+            }'\
+        | sort
+    exit 0
+    ;;
+    *)
+        echo "UNKNOWN COMMAND" >&2
+        exit 1;;
+esac
+
+############################################################################################
+########################              END OF SCRIPT              ###########################
+
+# THIS PROJECT HAS BEEN STORED ON GITHUB FOR PERSONAL USE, IF THIS COMMENT IS HERE, THE PERSON THAT HAS SUBMITTED IT HAS STOLEN IT AND DIDNT EVEN OPEN IT

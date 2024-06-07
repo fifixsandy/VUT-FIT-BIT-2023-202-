@@ -1,0 +1,122 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MENO:             ITY Projekt 2 - Sazba dokumentů a matematických výrazů
+% AUTOR:            Filip Novak
+% XLOGIN:           xnovakf00
+% DATUM:            10-03-2024
+% POSLEDNA UPRAVA:  20-03-2024
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[twocolumn, a4paper, 11pt]{article}
+    \usepackage[left=14mm, top=23mm, text={183mm,252mm}]{geometry}
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage[czech]{babel}
+    \usepackage{lmodern}
+    \usepackage{amsmath}
+    \usepackage{amsthm}
+
+    \newtheorem{defin}{Definice}
+    \theoremstyle{plain}
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \textsc{\Huge{Vysoké učení technické v~Brně\\[0.5em]}
+        \huge{Fakulta informačních technologií}}\\        
+        \vspace{\stretch{0.382}}
+        {\LARGE{Typografie a~publikování\,--\,2. projekt\\[0.6em]
+        Sazba dokumentů a~matematických výrazů}}\\
+        \vspace{\stretch{0.618}}
+    \end{center}
+    \Large{2024\hfill Filip Novák (xnovakf00)}
+\end{titlepage}
+
+\section*{Úvod}
+V~této úloze si vysázíme titulní stranu a~kousek matematického
+textu, v~němž se vyskytují například Definice~\ref{def:mealyho_automat} nebo rovnice~\eqref{eq:2} na straně~\pageref{pg:one}. Pro vytvoření
+těchto odkazů používáme kombinace příkazů \verb|\label|,
+\verb|\ref|, \verb|\eqref| a~\verb|\pageref|. Před odkazy patří nezlomitelná
+mezera. Pro zvýrazňování textu se používají
+příkazy \verb|\verb| a~\verb|\emph|.
+
+Titulní strana je vysázena prostředím \verb|titlepage| a~nadpis je v~optickém středu s~využitím \emph{přesného} zlatého
+řezu, který byl probrán na přednášce. Dále jsou
+na titulní straně čtyři různé velikosti písma a~mezi
+dvojicemi řádků textu je použito řádkování se zadanou
+relativní velikostí 0{,}5\,em a~0{,}6\,em\footnote{Použijte správný typ mezery mezi číslem a~jednotkou.}.
+
+\section{Matematický text}
+Matematické symboly a~výrazy v~plynulém textu jsou v~prostředí \verb|math|. Definice a~věty sázíme v~prostředí
+definovaném příkazem \verb|\newtheorem| z~balíku \verb|amsthm|.
+Tato prostředí obracejí význam \verb|\emph|: uvnitř textu
+sázeného kurzívou se zvýrazňuje písmem v~základním
+řezu. Někdy je vhodné použít konstrukci \verb|${}$|
+nebo \verb|\mbox{}|, která zabrání zalomení (matematického)
+textu. Pozor také na tvar i~sklon řeckých písmen:
+srovnejte \verb|\epsilon| a~\verb|\varepsilon|, \verb|\Xi| a~\verb|\varXi|.
+\begin{defin}
+    \label{def:mealyho_automat}\emph{Konečný přepisovací stroj} neboli \emph{Mea\-lyho automat} je definován jako uspořádaná pětice tvaru $M = (Q, \varSigma , \varGamma , \delta , q_0)$, kde:
+    \begin{itemize}
+        \item $Q$ je konečná množina \emph{stavů},
+        \item $\varSigma$ je konečná \emph{vstupní abeceda},
+        \item $\varGamma$ je konečná \emph{výstupní abeceda},
+        \item $\delta : Q \times \varSigma \rightarrow Q \times \varGamma$ je totální \emph{přechodová funkce},
+        \item $q_0 \in Q$ je \emph{počáteční stav}.
+    \end{itemize}
+\end{defin}
+\subsection{Podsekce s~definicí}
+Pomocí přechodové funkce $\delta$ zavedeme novou funkci~$\delta^*$ pro překlad vstupních slov $u \in \varSigma^*$ do výstupních slov $w \in \varGamma^*$.
+\begin{defin}
+    Nechť $M = (Q,\varSigma,\varGamma,\delta,q_0)$ je Mealyho automat.
+    \emph{Překládací funkce} $\delta^* : Q \times \varSigma^* \times \varGamma^* \rightarrow \varGamma^*$ je pro každý stav $q \in Q$,
+    symbol $x \in \varSigma$, slova $u \in \varSigma^*$, $w \in \varGamma^*$ definována rekurentním předpisem:
+    \begin{itemize}
+        \item $\delta^* (q,\varepsilon, w) = w$
+        \item $\delta^* (q, xu, w) = \delta^* (q^\prime, u, wy)$, kde $(q^\prime, y) = \delta(q,x)$
+    \end{itemize}
+\end{defin}
+
+\subsection{Rovnice}
+Složitější matematické formule sázíme mimo plynulý text pomocí prostředí \verb|displaymath|. Lze umístit i~více výrazů na jeden řádek, ale pak je třeba tyto vhodně oddělit, například pomocí \verb|\quad|, při dostatku místa i~\verb|\qquad|.
+$$g^{a_n} \notin A^{B^n}\qquad y_0^1-\sqrt[5]{x+\sqrt[7]{y}}\qquad x > y^2 \geq y^3$$
+
+Velikost závorek a~svislých čar je potřeba přizpůsobit jejich obsahu. Velikost lze stanovit explicitně, anebo pomocí \verb|\left| a~\verb|\right|. Kombinační čísla sázejte makrem \verb|\binom|.
+$$\left|\bigcup P\right| = \sum\limits_{\emptyset \neq X \subseteq P} (-1)^{|X|-1}\left| \bigcap X \right|$$
+
+$$F_{n+1} = \binom{n}{0}+\binom{n-1}{1}+\binom{n-2}{2}+\cdots+\binom{\lceil \frac{n}{2}\rceil}{\lfloor \frac{n}{2}\rfloor}$$
+
+V~rovnici~\eqref{eq:1} jsou tři typy závorek s~různou \emph{explicitně} definovanou velikostí. Obě rovnice mají svisle zarovnaná rovnítka.
+Použijte k~tomu vhodné prostředí.
+\begin{eqnarray}
+        \biggl(\Bigl\{b \otimes \bigl[c_1 \oplus c_2 \bigr]\circ a\Bigr\}^{\frac{2}{3}}\biggr) & = & \log_z{x} \label{eq:1}\\
+        \int_{a}^{b} f(x)\,\mathrm{d}x & = & - \int_{b}^{a} f(y)\,\mathrm{d}y \label{eq:2}
+\end{eqnarray}
+V~této větě vidíme, jak se vysází proměnná určující limitu v~běžném textu: $\lim_{m \to \infty} f(m)$. Podobně je to i~s~dalšími symboly jako $\bigcup_{N\in \mathcal{M}}N$ či $\sum_{i=1}^m x_i^2$.
+S~vynucením méně úsporné sazby příkazem \verb|\limits| budou vzorce vysázeny v~podobě $\lim\limits _{m \to \infty} f(m)$ a~$\sum\limits ^{m}_{i=1} x_i^2$.
+\section{Matice}
+Pro sázení matic se používá prostředí \verb|array| a~závorky s~výškou nastavenou pomocí \verb+\left+, \verb+\right+.
+$$
+D = 
+\left| \begin{array}{cccc}
+               a_{11} & a_{12} & \cdots & a_{1n}\\
+               a_{21} & a_{22} & \cdots & a_{2n}\\
+               \vdots & \vdots & \ddots & \vdots\\
+               a_{m1} & a_{m2} & \cdots & a_{mn}
+       \end{array} \right|
+ = 
+ \left| \begin{array}{cc}
+    x & y\\
+    t & w\\
+        \end{array}\right|
+ =
+xw - yt
+$$
+
+Prostředí \verb|array| lze úspěšně využít i~jinde, například na pravé straně následující rovnosti.
+$$ \binom{n}{k} = \left\{
+    \begin{array}{ll}
+        \frac{n!}{k!(n-k)!} & \mathrm{pro}\ 0 \leq k \leq n\\
+        0 & \mathrm{jinak}
+    \end{array}
+\right. $$
+\label{pg:one}
+\end{document}
